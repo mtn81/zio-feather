@@ -2,7 +2,8 @@
 
 ## What is this
 zio-feather is a experimental library.  
-It is build on scala3 and [ZIO](https://github.com/zio/zio).  
+It is build on top of scala3 and [ZIO](https://github.com/zio/zio).  
+ZIO is a excellent functional library.
 
 zio-feather aims at
 * simplify dependency management 
@@ -12,9 +13,9 @@ zio-feather aims at
   * model errors as enum or type aliases.
   * automatic stack tracing on mapping errors.
 
-You need to follow specific module patterns in zio-feather, 
-but you can minimumize boiler codes and following convension,
-your program looks like a scripting language.
+Following specific module patterns in zio-feather, 
+you can minimumize boiler codes (duplicated sigunitures, type annotations, etc).
+And your program looks like a scripting language (+ type definitions).
 
 ## Examples
 
