@@ -65,7 +65,56 @@ trait DoBar extends DIFn:
 * You can easily create mock function for testing by implement mock fn.
 * You can controll injected instance by setting given scope properly. (ex. live instances not in companion.)
 
-### Error 
+### Error Handling
+* Put error types in companion. (enum or type alias)
+* Mixin ```WithErr``` and use ```.err_``` for error mapping
+
+```
+(type alias)
+
+object DoHoge extends HasErr:
+  type Err = DoA | DoB
+  ...
+
+trait DoHoge extends DIFn, WithErr(DoHoge):
+  import DoHoge.*
+  
+  type Deps = DoA * DoB
+  type Impl[R] = () => XZIO[R, Err, Unit]
+  ...
+  lazy val impl =
+    ...
+    for
+      a <- doA.fn().err_  // err_ is unnessesarry if you do not need stack tracing.
+      b <- doB.fn().err_  // err_ is unnessesarry if you do not need stack tracing.
+    yield
+      ()
+```
+
+```
+(enums)
+
+object DoHoge extends HasErr:
+  enum Err:
+    case Failed(cause: DoA | DoB)
+    case MyErr
+  ...
+
+trait DoHoge extends DIFn, WithErr(DoHoge):
+  import DoHoge.*
+  
+  type Deps = DoA * DoB
+  type Impl[R] = () => XZIO[R, Err, Unit]
+  ...
+  lazy val impl =
+    ...
+    for
+      a <- doA.fn().err_ 
+      b <- doB.fn().err_ 
+      _ <- Err.MyErr.err
+    yield
+      ()
+```
 
 ## License
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
