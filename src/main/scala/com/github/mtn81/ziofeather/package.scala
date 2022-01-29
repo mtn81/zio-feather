@@ -18,5 +18,4 @@ package object ziofeather:
 
   export tuple.types.*
 
-  export zio.types.*
 

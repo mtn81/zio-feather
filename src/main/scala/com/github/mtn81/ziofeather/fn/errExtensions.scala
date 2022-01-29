@@ -2,7 +2,6 @@ package com.github.mtn81.ziofeather.fn
 
 import zio.*
 
-import com.github.mtn81.ziofeather.zio.*
 import com.github.mtn81.ziofeather.error.types.*
 import com.github.mtn81.ziofeather.error.functions.*
 import com.github.mtn81.ziofeather.error.mapper.*
@@ -10,6 +9,7 @@ import com.github.mtn81.ziofeather.error.mapper.*
 object errExtensions:
   import typeHolders.*
   import templates.*
+  import types.*
 
   trait WithErr[T <: HasErr](using val types: T):
     import types.*

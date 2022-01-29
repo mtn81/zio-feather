@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather.zio
+package com.github.mtn81.ziofeather.fn
 
 import zio.*
 
