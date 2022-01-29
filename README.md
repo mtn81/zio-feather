@@ -40,7 +40,7 @@ trait DoHoge extends HasFn
 ```
 
 * Parent Function 
-  * Define dependency types in ```Deps``` type.
+  * Define dependency types in ```Deps``` type, and function type in ```Impl[R]``` type
   * Implement ```lazy val impl``` (using ```dependsOn_```)
   * Inject dependencies in live instance creation by defining fn, using ```inject_```.
 ```
