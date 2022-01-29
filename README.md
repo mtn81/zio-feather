@@ -2,7 +2,7 @@
 
 ## What is this
 zio-feather is a experimental library, and it is build on top of scala3 and [ZIO](https://github.com/zio/zio).  
-Mixing ZIO and scala3 capability, zio-feather wraps ZIO and it provides simpler usage for ZIO's excellent functionalities, especially
+Mixing ZIO and scala3 capability, zio-feather provides simpler usage for ZIO's excellent functionalities, especially
 
 * simplify dependency management 
   * compile time dependency injection using scala3's context (implicit).
