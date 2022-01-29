@@ -15,6 +15,7 @@ package object ziofeather:
   export fn.functions.*
   export fn.templates.*
   export fn.typeHolders.*
+  export fn.types.*
 
   export tuple.types.*
 
