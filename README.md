@@ -13,12 +13,12 @@ Mixing ZIO and scala3 capability, zio-feather provides simpler usage for ZIO's e
   * minimumize error integration codes.
   * automatic stack tracing on mapping errors.
 
-Following specific module patterns in zio-feather, you can minimumize boiler codes (duplicated sigunitures, type annotations, etc).
+On the specific module patterns in zio-feather, you can minimumize boiler codes (duplicated sigunitures, type annotations, etc).
 And your programs may bocome simple and looks like a scripting language (+ type definitions).
 
 ## Examples
 
-### Module Pattern
+### Dependency injection
 * For service functions, put one public function in one trait. (application service, domain service, infrastracture service...)
 * Leaf function
   * Implement fn (fn is a public port).
