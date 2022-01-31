@@ -11,7 +11,7 @@ Mixing ZIO and scala3 capability, zio-feather provides simpler usage for ZIO's e
 * simplify error modeling and handling
   * model errors as enum or type aliases for each functions, so you can trace errors by types. (no global error list).
   * minimumize error integration codes.
-  * automatic stack tracing on mapping errors.
+  * automatic stack trace causing on mapping errors.
 
 On the specific module patterns in zio-feather, you can minimumize boiler codes (duplicated sigunitures, type annotations, etc).
 And your programs may bocome simple and looks like a scripting language (+ type definitions).
