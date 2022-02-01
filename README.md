@@ -9,7 +9,7 @@ With a specific module pattern, zio-feather provides
 you can minimumize boiler codes (duplicated sigunitures, type annotations, etc) with zio-feather.
 
 ## Home Page
-https://
+https://mtn81.github.io/zio-feather
 
 
 ## License
