@@ -1,7 +1,7 @@
-package com.github.mtn81.ziofeather.error
+package io.github.mtn81.ziofeather.error
 
 import zio.*
-import com.github.mtn81.ziofeather.error.mapper.*
+import io.github.mtn81.ziofeather.error.mapper.*
 
 object functions:
   import types.*

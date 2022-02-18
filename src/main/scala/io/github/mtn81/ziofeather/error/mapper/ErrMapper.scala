@@ -1,11 +1,10 @@
-package com.github.mtn81.ziofeather.error.mapper
+package io.github.mtn81.ziofeather.error.mapper
 
 import scala.deriving.*
 import scala.compiletime.*
 
-/**
- * C => E のエラー情報の変換
- */
+/** C => E のエラー情報の変換
+  */
 sealed trait ErrMapper[C, E] extends (C => E)
 
 object ErrMapper:

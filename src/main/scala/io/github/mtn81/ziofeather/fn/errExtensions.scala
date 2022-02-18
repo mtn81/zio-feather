@@ -1,10 +1,10 @@
-package com.github.mtn81.ziofeather.fn
+package io.github.mtn81.ziofeather.fn
 
 import zio.*
 
-import com.github.mtn81.ziofeather.error.types.*
-import com.github.mtn81.ziofeather.error.functions.*
-import com.github.mtn81.ziofeather.error.mapper.*
+import io.github.mtn81.ziofeather.error.types.*
+import io.github.mtn81.ziofeather.error.functions.*
+import io.github.mtn81.ziofeather.error.mapper.*
 
 object errExtensions:
   import typeHolders.*
@@ -26,7 +26,15 @@ object errExtensions:
       inline def terr_(using errConv: ErrMapper[T, Err]): ZIO[R, AppErr[Err], A] =
         z.throwableTo[Err]
 
-  trait SimpleDIFn[T <: HasInOutErr](using override val types: T) extends DIFn, WithErr[T]:
+  trait SimpleDIFn extends DIFn:
+    type Type <: HasInOutErr
+    val types: Type
+
     import types.*
 
     type Impl[R] = Input => XZIO[R, Err, Output]
+
+  object SimpleDIFn:
+    trait Aux[T <: HasInOutErr](using override val types: T) extends SimpleDIFn, WithErr[T]:
+
+      override type Type = T

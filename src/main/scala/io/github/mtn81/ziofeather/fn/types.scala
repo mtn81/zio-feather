@@ -1,8 +1,8 @@
-package com.github.mtn81.ziofeather.fn
+package io.github.mtn81.ziofeather.fn
 
 import zio.*
 
-import com.github.mtn81.ziofeather.error.types.*
+import io.github.mtn81.ziofeather.error.types.*
 
 object types:
   type XZIO[-R, +E, +A] = ZIO[ZEnv & R, AppErr[E], A]

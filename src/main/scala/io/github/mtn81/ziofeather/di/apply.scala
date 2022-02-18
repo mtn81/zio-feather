@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather.di
+package io.github.mtn81.ziofeather.di
 
 import zio.*
 

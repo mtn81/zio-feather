@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather
+package io.github.mtn81.ziofeather
 
 import zio.test.*
 import zio.test.Assertion.*

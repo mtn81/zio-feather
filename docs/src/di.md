@@ -8,34 +8,34 @@
 ```scala
 // Leaf Function (no dependency)
 
-import com.github.mtn81.ziofeather.*
+import io.github.mtn81.ziofeather.*
 
 object DoHoge:
   given live: DoHoge with {}
   
 trait DoHoge extends HasFn
   type Fn = ...
-  lazy val fn = ...
+  def fn = ...
 ```
 
 * Parent Function 
   * Define dependency types in ```Deps``` type, and function type in ```Impl[R]``` type
-  * Implement ```lazy val impl``` (using ```dependsOn_```)
+  * Implement ```def impl``` (using ```dependsOn_```)
   * Inject dependencies in live instance creation by defining fn, using ```inject_```.
 
 ```scala
 // Parent Function (has dependency)
 
-import com.github.mtn81.ziofeather.*
+import io.github.mtn81.ziofeather.*
 
 object DoBar:
   given live: DoBar with
-    lazy val fn = impl on inject_
+    def fn = impl on inject_
   
 trait DoBar extends DIFn:
   type Deps = DoHoge * DoBaz  // depencency
   type Impl[R] = (A) => XZIO[R, Err, B]
-  lazy val impl =
+  def impl =
     a =>
     dependsOn_ { (doHoge, doBaz) =>
       ...

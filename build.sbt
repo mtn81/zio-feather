@@ -1,6 +1,7 @@
-ThisBuild / organization       := "com.github.mtn81"
-ThisBuild / version            := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion       := "3.1.0"
+ThisBuild / organization := "io.github.mtn81"
+ThisBuild / version      := "0.1.6"
+ThisBuild / scalaVersion := "3.1.1"
+ThisBuild / scalacOptions ++= Seq("-Ysafe-init", "-Xcheck-macros")
 ThisBuild / run / fork         := true
 ThisBuild / run / connectInput := true
 ThisBuild / resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"

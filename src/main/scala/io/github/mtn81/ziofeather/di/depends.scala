@@ -1,9 +1,9 @@
-package com.github.mtn81.ziofeather.di
+package io.github.mtn81.ziofeather.di
 
 import zio.*
 import scala.compiletime.*
 
-import com.github.mtn81.ziofeather.tuple.types.*
+import io.github.mtn81.ziofeather.tuple.types.*
 
 object depends:
   import types.*

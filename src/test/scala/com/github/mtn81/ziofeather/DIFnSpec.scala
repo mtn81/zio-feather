@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather
+package io.github.mtn81.ziofeather
 
 import zio.*
 import zio.test.*
@@ -11,7 +11,7 @@ object DISpec extends DefaultRunnableSpec {
 
   trait Fn2 extends HasFn:
     type Fn = () => XZIO[Any, Nothing, String]
-    lazy val fn =
+    def fn =
       () => ZIO.succeed("Fn2")
 
   object Fn3:
@@ -19,7 +19,7 @@ object DISpec extends DefaultRunnableSpec {
 
   trait Fn3 extends HasFn:
     type Fn = () => XZIO[Any, Nothing, String]
-    lazy val fn =
+    def fn =
       () => ZIO.succeed("Fn3")
 
   def spec =
@@ -30,14 +30,14 @@ object DISpec extends DefaultRunnableSpec {
           type Deps    = Fn2
           type Impl[R] = () => XZIO[R, Nothing, String]
 
-          lazy val impl =
+          def impl =
             () =>
               dependsOn_ { fn2 =>
                 fn2.fn().map(s => s"Fn1>$s")
               }
 
         given fn1: Fn1 with
-          lazy val fn = impl on inject_
+          def fn = impl on inject_
 
         assertM(fn1.fn())(equalTo("Fn1>Fn2"))
 
@@ -48,7 +48,7 @@ object DISpec extends DefaultRunnableSpec {
           type Deps    = Fn2 * Fn3
           type Impl[R] = () => XZIO[R, Nothing, String]
 
-          lazy val impl =
+          def impl =
             () =>
               dependsOn_ { (fn2, fn3) =>
                 for
@@ -58,7 +58,7 @@ object DISpec extends DefaultRunnableSpec {
               }
 
         given fn1: Fn1 with
-          lazy val fn = impl on inject_
+          def fn = impl on inject_
 
         assertM(fn1.fn())(equalTo("Fn1>Fn2>Fn3"))
 
@@ -72,7 +72,7 @@ object DISpec extends DefaultRunnableSpec {
             type ExternalDeps = Fn3
             type Impl[R]      = () => XZIO[R, Nothing, String]
 
-            lazy val impl =
+            def impl =
               () =>
                 dependsOn_ { (fn2, fn3) =>
                   for
@@ -82,7 +82,7 @@ object DISpec extends DefaultRunnableSpec {
                 }
 
           given fn1: Fn1 with
-            lazy val fn = impl on inject_
+            def fn = impl on inject_
 
           assertM(
             fn1.fn().provideSome[ZEnv](_ ++ Has(new Fn3 {}))
@@ -97,7 +97,7 @@ object DISpec extends DefaultRunnableSpec {
             type Deps    = Fn2 * Fn3
             type Impl[R] = () => XZIO[R, Nothing, String]
 
-            lazy val fn =
+            def fn =
               () =>
                 dependsOn_ { (fn2, fn3) =>
                   for

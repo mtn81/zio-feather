@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather.tuple
+package io.github.mtn81.ziofeather.tuple
 
 object types:
 

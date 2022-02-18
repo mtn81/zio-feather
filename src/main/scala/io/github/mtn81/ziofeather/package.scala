@@ -1,6 +1,6 @@
-package com.github.mtn81
+package io.github.mtn81
 
-import com.github.mtn81.ziofeather.fn.errExtensions
+import io.github.mtn81.ziofeather.fn.errExtensions
 
 package object ziofeather:
   export di.apply.*

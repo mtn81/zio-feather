@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather
+package io.github.mtn81.ziofeather
 
 import zio.*
 import zio.test.*
@@ -12,7 +12,7 @@ object DependsSpec extends DefaultRunnableSpec {
 
         trait B extends HasFn:
           type Fn = String
-          lazy val fn = "function of B"
+          def fn = "function of B"
 
         assertM(
           for

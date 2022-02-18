@@ -16,7 +16,7 @@ trait DoHoge extends DIFn, WithErr(DoHoge):
   type Deps = DoA * DoB
   type Impl[R] = () => XZIO[R, Err, Unit]
   ...
-  lazy val impl =
+  def impl =
     ...
     for
       a <- doA.fn().err_  // err_ is unnessesarry if you do not need stack tracing.
@@ -40,7 +40,7 @@ trait DoHoge extends DIFn, WithErr(DoHoge):
   type Deps = DoA * DoB
   type Impl[R] = () => XZIO[R, Err, Unit]
   ...
-  lazy val impl =
+  def impl =
     ...
     for
       a <- doA.fn().err_ 

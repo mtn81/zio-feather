@@ -1,4 +1,4 @@
-package com.github.mtn81.ziofeather.error.mapper
+package io.github.mtn81.ziofeather.error.mapper
 
 import scala.quoted.*
 
