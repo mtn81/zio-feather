@@ -7,7 +7,7 @@ object types:
   type Deps0    = EmptyTuple
   type Deps1[A] = Tuple1[A]
 
-  type ToHas[D] = D match
-    case h *: t     => Has[h] & ToHas[t]
+  type ToEnv[D] = D match
+    case h *: t     => h & ToEnv[t]
     case EmptyTuple => Any
-    case _          => Has[D]
+    case _          => D

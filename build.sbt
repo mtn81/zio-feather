@@ -28,7 +28,7 @@ lazy val docs = project
   )
 
 // dependendies
-lazy val zioVer = "1.0.13"
+lazy val zioVer = "2.0.0-RC3"
 lazy val zioDeps = Seq(
   "dev.zio" %% "zio"               % zioVer,
   "dev.zio" %% "zio-streams"       % zioVer,

@@ -3,7 +3,6 @@ package io.github.mtn81
 import io.github.mtn81.ziofeather.fn.errExtensions
 
 package object ziofeather:
-  export di.apply.*
   export di.depends.*
   export di.inject.*
   export di.types.*

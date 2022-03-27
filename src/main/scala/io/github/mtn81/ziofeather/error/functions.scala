@@ -63,4 +63,4 @@ object functions:
       ZIO.fail(AppErr(a))
 
   def errWhen[E](b: => Boolean)(e: => E): ZIO[Any, AppErr[E], Unit] =
-    ZIO.when(b)(e.err)
+    ZIO.when(b)(e.err).unit

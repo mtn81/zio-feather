@@ -29,7 +29,6 @@ object DISpec extends DefaultRunnableSpec {
         trait Fn1 extends DIFn:
           type Deps    = Fn2
           type Impl[R] = () => XZIO[R, Nothing, String]
-
           def impl =
             () =>
               dependsOn_ { fn2 =>
@@ -37,7 +36,7 @@ object DISpec extends DefaultRunnableSpec {
               }
 
         given fn1: Fn1 with
-          def fn = impl on inject_
+          def fn = impl.injected
 
         assertM(fn1.fn())(equalTo("Fn1>Fn2"))
 
@@ -58,7 +57,7 @@ object DISpec extends DefaultRunnableSpec {
               }
 
         given fn1: Fn1 with
-          def fn = impl on inject_
+          def fn = impl.injected
 
         assertM(fn1.fn())(equalTo("Fn1>Fn2>Fn3"))
 
@@ -68,7 +67,7 @@ object DISpec extends DefaultRunnableSpec {
         testM("部分的に依存関係の解決をして実行できる") {
 
           trait Fn1 extends PartialDIFn:
-            type InternalDeps = Fn2
+            type Deps         = Fn2
             type ExternalDeps = Fn3
             type Impl[R]      = () => XZIO[R, Nothing, String]
 
@@ -82,10 +81,10 @@ object DISpec extends DefaultRunnableSpec {
                 }
 
           given fn1: Fn1 with
-            def fn = impl on inject_
+            def fn = impl.injected
 
           assertM(
-            fn1.fn().provideSome[ZEnv](_ ++ Has(new Fn3 {}))
+            fn1.fn().provideSomeEnvironment[ZEnv](_.add(new Fn3 {}))
           )(equalTo("Fn1>Fn2>Fn3"))
 
         }
@@ -109,7 +108,7 @@ object DISpec extends DefaultRunnableSpec {
           given fn1: Fn1 with {}
 
           assertM(
-            fn1.fn().provideSome[ZEnv](_ ++ Has(new Fn2 {}) ++ Has(new Fn3 {}))
+            fn1.fn().provideSomeEnvironment[ZEnv](_ ++ ZEnvironment(new Fn2 {}, new Fn3 {}))
           )(equalTo("Fn1>Fn2>Fn3"))
 
         }

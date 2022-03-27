@@ -14,12 +14,12 @@ object depends:
       case _: (h *: t)  => DependsOnTup[h *: t]()
       case _            => DependsOnOne[D]()
 
-  def dependsOnA[R: Tag]: URIO[Has[R], R] =
-    ZIO.environment[Has[R]].map(_.get)
+  inline def dependsOnA[R]: URIO[R, R] =
+    ZIO.environment[R].map(_.get)
 
   class DependsOnTup[D <: Tuple]:
 
-    inline def apply[R, E, A](f: D => ZIO[R, E, A]): ZIO[R & ToHas[D], E, A] =
+    inline def apply[R, E, A](f: D => ZIO[R, E, A]): ZIO[R & ToEnv[D], E, A] =
       for
         deps   <- depsValue[D]
         result <- f(deps)
@@ -34,7 +34,7 @@ object depends:
 
     class CtxApply2[D1, D2]:
       private type Tup = (D1, D2)
-      inline def apply[R, E, A](f: (D1, D2) ?=> ZIO[R, E, A]): ZIO[R & ToHas[Tup], E, A] =
+      inline def apply[R, E, A](f: (D1, D2) ?=> ZIO[R, E, A]): ZIO[R & ToEnv[Tup], E, A] =
         for
           deps   <- depsValue[Tup]
           result <- f(using deps(0), deps(1))
@@ -42,7 +42,7 @@ object depends:
 
     class CtxApply3[D1, D2, D3]:
       private type Tup = (D1, D2, D3)
-      inline def apply[R, E, A](f: (D1, D2, D3) ?=> ZIO[R, E, A]): ZIO[R & ToHas[Tup], E, A] =
+      inline def apply[R, E, A](f: (D1, D2, D3) ?=> ZIO[R, E, A]): ZIO[R & ToEnv[Tup], E, A] =
         for
           deps   <- depsValue[Tup]
           result <- f(using deps(0), deps(1), deps(2))
@@ -50,13 +50,13 @@ object depends:
 
     class CtxApply4[D1, D2, D3, D4]:
       private type Tup = (D1, D2, D3, D4)
-      inline def apply[R, E, A](f: (D1, D2, D3, D4) ?=> ZIO[R, E, A]): ZIO[R & ToHas[Tup], E, A] =
+      inline def apply[R, E, A](f: (D1, D2, D3, D4) ?=> ZIO[R, E, A]): ZIO[R & ToEnv[Tup], E, A] =
         for
           deps   <- depsValue[Tup]
           result <- f(using deps(0), deps(1), deps(2), deps(3))
         yield result
 
-    inline def depsValue[D2 <: Tuple]: URIO[ToHas[D2], D2] =
+    inline def depsValue[D2 <: Tuple]: URIO[ToEnv[D2], D2] =
       (inline erasedValue[D2] match {
         case _: EmptyTuple =>
           ZIO.succeed(EmptyTuple)
@@ -67,14 +67,14 @@ object depends:
             tail <- depsValue[t]
           yield head *: tail
 
-      }).asInstanceOf[URIO[ToHas[D2], D2]]
+      }).asInstanceOf[URIO[ToEnv[D2], D2]]
 
   class DependsOnOne[D]:
-    inline def apply[R, E, A](f: D => ZIO[R, E, A]): ZIO[R & Has[D], E, A] =
+    inline def apply[R, E, A](f: D => ZIO[R, E, A]): ZIO[R & D, E, A] =
       for
         deps   <- dependsOnA[D]
         result <- f(deps)
       yield result
 
-    inline def context[R, E, A](f: D ?=> ZIO[R, E, A]): ZIO[R & Has[D], E, A] =
+    inline def context[R, E, A](f: D ?=> ZIO[R, E, A]): ZIO[R & D, E, A] =
       apply(d1 => f(using d1))
