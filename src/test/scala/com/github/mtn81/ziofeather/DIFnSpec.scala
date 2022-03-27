@@ -36,7 +36,7 @@ object DISpec extends DefaultRunnableSpec {
               }
 
         given fn1: Fn1 with
-          def fn = impl.injected
+          def fn = impl on inject_
 
         assertM(fn1.fn())(equalTo("Fn1>Fn2"))
 
@@ -57,7 +57,7 @@ object DISpec extends DefaultRunnableSpec {
               }
 
         given fn1: Fn1 with
-          def fn = impl.injected
+          def fn = impl on inject_
 
         assertM(fn1.fn())(equalTo("Fn1>Fn2>Fn3"))
 
@@ -81,7 +81,7 @@ object DISpec extends DefaultRunnableSpec {
                 }
 
           given fn1: Fn1 with
-            def fn = impl.injected
+            def fn = impl on inject_
 
           assertM(
             fn1.fn().provideSomeEnvironment[ZEnv](_.add(new Fn3 {}))
