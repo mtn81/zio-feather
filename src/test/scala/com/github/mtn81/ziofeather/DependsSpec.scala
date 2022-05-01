@@ -4,10 +4,10 @@ import zio.*
 import zio.test.*
 import zio.test.Assertion.*
 
-object DependsSpec extends DefaultRunnableSpec {
+object DependsSpec extends ZIOSpecDefault {
   def spec =
     suite("dependsOn Spec")(
-      testM("dependsOnA, dependsOnFn関数で、ZIOに依存関係を追加できる") {
+      test("dependsOnA, dependsOnFn関数で、ZIOに依存関係を追加できる") {
         trait A
 
         trait B extends HasFn:
@@ -22,7 +22,7 @@ object DependsSpec extends DefaultRunnableSpec {
         )(equalTo("success: function of B"))
           .provideEnvironment(ZEnvironment(new A {}, new B {}))
       },
-      testM("dependsOn関数で、ZIOに依存関係を追加できる") {
+      test("dependsOn関数で、ZIOに依存関係を追加できる") {
 
         for
           r1 <- assertM(

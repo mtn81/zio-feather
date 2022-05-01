@@ -1,5 +1,5 @@
 ThisBuild / organization := "io.github.mtn81"
-ThisBuild / version      := "0.1.6"
+ThisBuild / version      := "0.2.5-SNAPSHOT"
 ThisBuild / scalaVersion := "3.1.1"
 ThisBuild / scalacOptions ++= Seq("-Ysafe-init", "-Xcheck-macros")
 ThisBuild / run / fork         := true
@@ -28,7 +28,7 @@ lazy val docs = project
   )
 
 // dependendies
-lazy val zioVer = "2.0.0-RC3"
+lazy val zioVer = "2.0.0-RC5"
 lazy val zioDeps = Seq(
   "dev.zio" %% "zio"               % zioVer,
   "dev.zio" %% "zio-streams"       % zioVer,

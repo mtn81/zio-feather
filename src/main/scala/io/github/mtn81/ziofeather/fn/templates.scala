@@ -4,6 +4,7 @@ import io.github.mtn81.ziofeather.di.types.*
 import io.github.mtn81.ziofeather.di.inject.*
 import io.github.mtn81.ziofeather.di.depends.*
 import io.github.mtn81.ziofeather.tuple.types.*
+import izumi.reflect.macrortti.LightTypeTagRef.Boundaries.Empty
 
 object templates:
 
@@ -28,12 +29,12 @@ object templates:
     type Impl[R]
 
     type ImplFn = Impl[ToEnv[TotalDeps]]
-    type Fn     = Impl[ToEnv[ExternalDeps]]
+    type Fn     = Impl[ToEnv[ExtDeps]]
 
     def impl: ImplFn
 
   trait ExternalDIFn extends HasFn, PartialInjection:
-    type ExternalDeps = Deps
+    type Deps = EmptyTuple
 
     type Impl[R]
-    type Fn = Impl[ToEnv[Deps]]
+    type Fn = Impl[ToEnv[ExtDeps]]

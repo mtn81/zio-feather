@@ -3,7 +3,7 @@ package io.github.mtn81.ziofeather
 import zio.test.*
 import zio.test.Assertion.*
 
-object TupleTypeSpec extends DefaultRunnableSpec {
+object TupleTypeSpec extends ZIOSpecDefault {
   def spec =
     suite("ToTup Spec")(
       test("生の型からTuple1への解決ができる") {

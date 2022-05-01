@@ -57,6 +57,8 @@ object functions:
   extension [R, E, A](z: ZIO[R, E, A])
     inline def err[E1](value: => E1): ZIO[R, AppErr[E1], A] =
       z.mapError(_ => AppErr(value))
+    inline def err[E1](f: E => E1): ZIO[R, AppErr[E1], A] =
+      z.mapError(e => AppErr(f(e)))
 
   extension [E](a: E)
     inline def err: ZIO[Any, AppErr[E], Nothing] =

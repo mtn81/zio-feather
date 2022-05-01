@@ -10,15 +10,13 @@ object inject:
   import types.*
 
   trait TotalInjection extends PartialInjection:
-    type ExternalDeps = EmptyTuple
-
-  object injection extends TotalInjection
+    type ExtDeps = EmptyTuple
 
   trait PartialInjection:
     type Deps
-    type ExternalDeps
-    type TotalDeps = Deps * ExternalDeps
-    type ResultEnv = ZEnv & ToEnv[ExternalDeps]
+    type ExtDeps
+    type TotalDeps = Deps * ExtDeps
+    type ResultEnv = ToEnv[ExtDeps]
 
     protected transparent inline def dependsOn_ = dependsOn[TotalDeps]
 

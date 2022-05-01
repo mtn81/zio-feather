@@ -4,7 +4,7 @@ import zio.*
 import zio.test.*
 import zio.test.Assertion.*
 
-object DISpec extends DefaultRunnableSpec {
+object DISpec extends ZIOSpecDefault {
 
   object Fn2:
     given live: Fn2 with {}
@@ -24,7 +24,7 @@ object DISpec extends DefaultRunnableSpec {
 
   def spec =
     suite("DIFn Spec")(
-      testM("依存関係の解決をして実行できる(１つの依存関係)") {
+      test("依存関係の解決をして実行できる(１つの依存関係)") {
 
         trait Fn1 extends DIFn:
           type Deps    = Fn2
@@ -41,7 +41,7 @@ object DISpec extends DefaultRunnableSpec {
         assertM(fn1.fn())(equalTo("Fn1>Fn2"))
 
       },
-      testM("依存関係の解決をして実行できる(複数の依存関係)") {
+      test("依存関係の解決をして実行できる(複数の依存関係)") {
 
         trait Fn1 extends DIFn:
           type Deps    = Fn2 * Fn3
@@ -51,6 +51,7 @@ object DISpec extends DefaultRunnableSpec {
             () =>
               dependsOn_ { (fn2, fn3) =>
                 for
+                  _  <- Console.printLine("test").orDie
                   s2 <- fn2.fn()
                   s3 <- fn3.fn()
                 yield s"Fn1>$s2>$s3"
@@ -62,56 +63,69 @@ object DISpec extends DefaultRunnableSpec {
         assertM(fn1.fn())(equalTo("Fn1>Fn2>Fn3"))
 
       }
-    ) +
-      suite("PartialDIFn Spec")(
-        testM("部分的に依存関係の解決をして実行できる") {
+    ) + suite("PartialDIFn Spec")(
+      test("部分的に依存関係の解決をして実行できる") {
 
-          trait Fn1 extends PartialDIFn:
-            type Deps         = Fn2
-            type ExternalDeps = Fn3
-            type Impl[R]      = () => XZIO[R, Nothing, String]
+        trait Fn1 extends PartialDIFn:
+          type Deps    = Fn2
+          type ExtDeps = Fn3
+          type Impl[R] = () => XZIO[R, Nothing, String]
 
-            def impl =
-              () =>
-                dependsOn_ { (fn2, fn3) =>
-                  for
-                    s2 <- fn2.fn()
-                    s3 <- fn3.fn()
-                  yield s"Fn1>$s2>$s3"
-                }
+          def impl =
+            () =>
+              dependsOn_ { (fn2, fn3) =>
+                for
+                  _  <- Console.printLine("test").orDie
+                  s2 <- fn2.fn()
+                  s3 <- fn3.fn()
+                yield s"Fn1>$s2>$s3"
+              }
 
-          given fn1: Fn1 with
-            def fn = impl on inject_
+        given fn1: Fn1 with
+          def fn = impl on inject_
 
-          assertM(
-            fn1.fn().provideSomeEnvironment[ZEnv](_.add(new Fn3 {}))
-          )(equalTo("Fn1>Fn2>Fn3"))
+        assertM(
+          fn1.fn().provideEnvironment(ZEnvironment(new Fn3 {}))
+        )(equalTo("Fn1>Fn2>Fn3"))
 
-        }
-      ) +
-      suite("ExternalDIFn Spec")(
-        testM("依存関係の解決はすべて呼び出し元にして実行できる") {
+      }
+    ) + suite("ExternalDIFn Spec")(
+      test("依存関係の解決はすべて呼び出し元にして実行できる") {
 
-          trait Fn1 extends ExternalDIFn:
-            type Deps    = Fn2 * Fn3
-            type Impl[R] = () => XZIO[R, Nothing, String]
+        trait Fn1 extends ExternalDIFn:
+          type ExtDeps = Fn2 * Fn3
+          type Impl[R] = () => XZIO[R, Nothing, String]
 
-            def fn =
-              () =>
-                dependsOn_ { (fn2, fn3) =>
-                  for
-                    s2 <- fn2.fn()
-                    s3 <- fn3.fn()
-                  yield s"Fn1>$s2>$s3"
-                }
+          def fn =
+            () =>
+              dependsOn_ { (fn2, fn3) =>
+                for
+                  _  <- Console.printLine("test").orDie
+                  s2 <- fn2.fn()
+                  s3 <- fn3.fn()
+                yield s"Fn1>$s2>$s3"
+              }
 
-          given fn1: Fn1 with {}
+        given fn1: Fn1 with {}
 
-          assertM(
-            fn1.fn().provideSomeEnvironment[ZEnv](_ ++ ZEnvironment(new Fn2 {}, new Fn3 {}))
-          )(equalTo("Fn1>Fn2>Fn3"))
+        trait Fn4 extends ExternalDIFn:
+          type ExtDeps = Fn2
+          type Impl[R] = () => XZIO[R, Nothing, String]
 
-        }
-      )
+          def fn =
+            () =>
+              dependsOn_ { (fn2) =>
+                for s2 <- fn2.fn()
+                yield s"Fn4>$s2"
+              }
+
+        given fn4: Fn4 with {}
+
+        assertM(
+          fn1.fn().provideEnvironment(ZEnvironment(new Fn2 {}, new Fn3 {}))
+        )(equalTo("Fn1>Fn2>Fn3"))
+
+      }
+    )
 
 }
