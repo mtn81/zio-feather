@@ -1,0 +1,391 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>Dependency injection · HonKit</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.7.1">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="error.html" />
+    
+    
+    <link rel="prev" href="types.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="install.html">
+            
+                <a href="install.html">
+            
+                    
+                    Install
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
+            
+                <span>
+            
+                    
+                    Features
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="types.html">
+            
+                <a href="types.html">
+            
+                    
+                    Types
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.2" data-path="di.html">
+            
+                <a href="di.html">
+            
+                    
+                    Dependency injection
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="error.html">
+            
+                <a href="error.html">
+            
+                    
+                    Error handling
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Dependency injection</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="dependency-injection">Dependency Injection</h1>
+<ul>
+<li>For service functions, put one public function in one trait. (application service, domain service, infrastracture service...)</li>
+<li>Leaf function<ul>
+<li>Implement fn (fn is a public port).</li>
+<li>Put live instance (implimentation instance) in companion.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-scala"><span class="hljs-comment">// Leaf Function (no dependency)</span>
+
+<span class="hljs-keyword">import</span> io.github.mtn81.ziofeather.*
+
+<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">DoHoge</span></span>:
+  given live: <span class="hljs-type">DoHoge</span> <span class="hljs-keyword">with</span> {}
+
+<span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">DoHoge</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HasFn</span></span>
+  <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Fn</span> </span>= ...
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fn</span> </span>= ...
+</code></pre>
+<ul>
+<li>Parent Function <ul>
+<li>Define dependency types in <code>Deps</code> type, and function type in <code>Impl[R]</code> type</li>
+<li>Implement <code>def impl</code> (using <code>dependsOn_</code>)</li>
+<li>Inject dependencies in live instance creation by defining fn, using <code>inject_</code>.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-scala"><span class="hljs-comment">// Parent Function (has dependency)</span>
+
+<span class="hljs-keyword">import</span> io.github.mtn81.ziofeather.*
+
+<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">DoBar</span></span>:
+  given live: <span class="hljs-type">DoBar</span> <span class="hljs-keyword">with</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fn</span> </span>= impl on inject_
+
+<span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">DoBar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">DIFn</span></span>:
+  <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Deps</span> </span>= <span class="hljs-type">DoHoge</span> * <span class="hljs-type">DoBaz</span>  <span class="hljs-comment">// depencency</span>
+  <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Impl</span>[<span class="hljs-type">R</span>] </span>= (<span class="hljs-type">A</span>) =&gt; <span class="hljs-type">XZIO</span>[<span class="hljs-type">R</span>, <span class="hljs-type">Err</span>, <span class="hljs-type">B</span>]
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">impl</span> </span>= a =&gt;
+    dependsOn_ { (doHoge, doBaz) =&gt;
+      ...
+    }
+</code></pre>
+<ul>
+<li>You can easily create mock function for testing by implement mock fn.</li>
+<li>You can controll injected instance by setting given scope properly. (ex. live instances not in companion.)</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="types.html" class="navigation navigation-prev " aria-label="Previous page: Types">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="error.html" class="navigation navigation-next " aria-label="Next page: Error handling">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Dependency injection","level":"1.3.2","depth":2,"next":{"title":"Error handling","level":"1.3.3","depth":2,"path":"error.md","ref":"./error.md","articles":[]},"previous":{"title":"Types","level":"1.3.1","depth":2,"path":"types.md","ref":"./types.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"di.md","mtime":"2022-05-02T11:39:06.444Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-02T11:40:26.297Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
