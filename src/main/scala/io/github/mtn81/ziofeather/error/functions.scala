@@ -59,6 +59,8 @@ object functions:
       z.mapError(_ => AppErr(value))
     inline def err[E1](f: E => E1): ZIO[R, AppErr[E1], A] =
       z.mapError(e => AppErr(f(e)))
+    inline def errTo[E1](using errConv: ErrMapper[E, E1]): ZIO[R, AppErr[E1], A] =
+      err[E1](errConv.apply)
 
   extension [E](a: E)
     inline def err: ZIO[Any, AppErr[E], Nothing] =
