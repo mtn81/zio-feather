@@ -1,7 +1,7 @@
 # Error Handling
 
 * Put error types in companion. (enum or type alias)
-* Mixin ```WithErr``` and use ```.err_``` for error mapping
+* Mixin ```WithErr``` and use ```.mapErr_``` for error mapping
 
 ```scala
 // error as type alias
@@ -19,8 +19,8 @@ trait DoHoge extends DIFn, WithErr(DoHoge):
   def impl =
     ...
     for
-      a <- doA.fn().err_  // err_ is unnessesarry if you do not need stack tracing.
-      b <- doB.fn().err_  // err_ is unnessesarry if you do not need stack tracing.
+      a <- doA.fn().mapErr_  // mapErr_ is unnessesarry if you do not need stack tracing.
+      b <- doB.fn().mapErr_  // mapErr_ is unnessesarry if you do not need stack tracing.
     yield
       ()
 ```
@@ -43,8 +43,8 @@ trait DoHoge extends DIFn, WithErr(DoHoge):
   def impl =
     ...
     for
-      a <- doA.fn().err_ 
-      b <- doB.fn().err_ 
+      a <- doA.fn().mapErr_ 
+      b <- doB.fn().mapErr_ 
       _ <- Err.MyErr.err
     yield
       ()

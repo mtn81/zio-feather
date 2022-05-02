@@ -35,8 +35,7 @@ object DoBar:
 trait DoBar extends DIFn:
   type Deps = DoHoge * DoBaz  // depencency
   type Impl[R] = (A) => XZIO[R, Err, B]
-  def impl =
-    a =>
+  def impl = a =>
     dependsOn_ { (doHoge, doBaz) =>
       ...
     }
