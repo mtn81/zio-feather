@@ -1,12 +1,11 @@
 # zio-feather
 
-zio-feather is a experimental library that is build on top of scala3 and [ZIO](https://github.com/zio/zio).  
-With a specific module pattern, zio-feather provides
+zio-feather is a thin wrapper library for [ZIO](https://github.com/zio/zio) with Scala3.  
+With a specific module pattern (one public method per one service), zio-feather enables
 
-* simple dependency injection 
-* simple error modeling and handling 
-
-you can minimumize boiler codes (duplicated sigunitures, type annotations, etc) with zio-feather.
+* Simpler dependency injection (using Scala3 context)
+* Simpler error modeling and handling 
+* Minimumize boiler codes (duplicated method definitions, type signatures, etc)
 
 ## Home Page
 https://mtn81.github.io/zio-feather
